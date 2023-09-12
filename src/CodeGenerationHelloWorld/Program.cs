@@ -1,29 +1,21 @@
-﻿using CodeGenerationHelloWorld;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
+﻿var data = File.ReadAllText($@"..\..\..\..\..\data\definitions.json");
 
-var data = File.ReadAllText($@"..\..\..\..\..\data\definitions.json");
+var definitions = JsonSerializer.Deserialize<JsonElement>(data);
 
-var input = JsonSerializer.Deserialize<DefinitionsFile>(data, new JsonSerializerOptions
+foreach(var item in definitions.GetProperty("simpleTypes").EnumerateArray())
 {
-    PropertyNameCaseInsensitive = true
-});
-
-foreach(var definition in input.SimpleTypes)
-{
-    await Generate(definition);
+    await Generate(item.GetProperty("name").GetString()!);
 }
 
-async Task Generate(Definition model)
+async Task Generate(string name)
 {
     var template = GetTemplate("Record");
 
     var templateProcessor = new RazorTemplateProcessor();
 
-    var result = await templateProcessor.ProcessAsync(template, model);
+    var result = await templateProcessor.ProcessAsync(template, new { Name = name });
 
-    File.WriteAllText($@"..\..\..\..\Target\{model.Name}.cs", result);
+    File.WriteAllText($@"..\..\..\..\Target\{name}.cs", result);
 }
 
 string GetTemplate(string name)
@@ -46,17 +38,5 @@ string GetTemplate(string name)
         }
     }
 
-    
     return stringBuilder.ToString();
-}
-
-public class DefinitionsFile
-{
-    public List<Definition> SimpleTypes { get; set; }
-};
-
-
-public class Definition
-{
-    public string Name { get; set; }
 }
