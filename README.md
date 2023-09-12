@@ -6,9 +6,15 @@ Introductory Code Generation project
 If you like or are using this project to learn or start your solution, please give it a star. Thanks!
 
 ## Table of Contents
+- [What is Design-Time Code Generation](#whatisit)
 - [How to run locally](#usage)
 - [How to Test](#roadmap)
   
+
+## What is Design-Time Code Generation
+
+ <img src="images/code-generation-1.jpg" />
+
 ## How to run locally
 
 
