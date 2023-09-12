@@ -1,4 +1,4 @@
-# Code Generation - Hello World
+# Design-Time Code Generation
 Introductory Code Generation project 
 
 ## Give a Star! :star:
