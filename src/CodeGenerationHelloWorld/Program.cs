@@ -15,7 +15,7 @@ async Task GenerateAsync(string name)
 
     var result = await templateProcessor.ProcessAsync(template, new { Name = name });
 
-    File.WriteAllText($@"..\..\..\..\Target\{name}.cs", result);
+    File.WriteAllText($@"..\..\..\..\Target\{name}.g.cs", result);
 }
 
 string GetTemplate(string name)
