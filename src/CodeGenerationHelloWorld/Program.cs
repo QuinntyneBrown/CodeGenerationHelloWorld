@@ -4,10 +4,10 @@ var definitions = JsonSerializer.Deserialize<JsonElement>(data);
 
 foreach(var item in definitions.GetProperty("simpleTypes").EnumerateArray())
 {
-    await Generate(item.GetProperty("name").GetString()!);
+    await GenerateAsync(item.GetProperty("name").GetString()!);
 }
 
-async Task Generate(string name)
+async Task GenerateAsync(string name)
 {
     var template = GetTemplate("Record");
 
@@ -24,19 +24,11 @@ string GetTemplate(string name)
 
     var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith($"{name}.txt"));
 
-    var stringBuilder = new StringBuilder();
-
     using(var stream = assembly.GetManifestResourceStream(resourceName))
     {
         using (var streamReader = new StreamReader(stream))
         {
-            string line;
-            while((line = streamReader.ReadLine()) != null)
-            {
-                stringBuilder.AppendLine(line);
-            }
+            return streamReader.ReadToEnd();
         }
     }
-
-    return stringBuilder.ToString();
 }
