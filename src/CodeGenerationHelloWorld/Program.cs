@@ -4,18 +4,18 @@ var definitions = JsonSerializer.Deserialize<JsonElement>(data);
 
 foreach(var item in definitions.GetProperty("simpleTypes").EnumerateArray())
 {
-    await GenerateAsync(item.GetProperty("name").GetString()!);
+    await GenerateAsync(item);
 }
 
-async Task GenerateAsync(string name)
+async Task GenerateAsync(JsonElement model)
 {
     var template = GetTemplate("Record");
 
     var templateProcessor = new RazorTemplateProcessor();
 
-    var result = await templateProcessor.ProcessAsync(template, new { Name = name });
+    var result = await templateProcessor.ProcessAsync(template, new { Name = model.GetProperty("name").GetString() });
 
-    File.WriteAllText($@"..\..\..\..\Target\{name}.g.cs", result);
+    File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
 }
 
 string GetTemplate(string name)

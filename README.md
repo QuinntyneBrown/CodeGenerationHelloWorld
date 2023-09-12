@@ -15,6 +15,38 @@ If you like or are using this project to learn or start your solution, please gi
 
  <img src="images/code-generation-1.jpg" />
 
+
+ ### Template
+
+ ```text
+ public record struct @(Model.Name)();
+ ```
+
+ ### Data / Model / User Input
+ ```data
+ {
+    "simpleTypes": [
+      {
+        "name": "HelloWorld"
+      }
+    ]
+}
+ ```
+
+ ### Generation Strategy
+ ```csharp
+ async Task GenerateAsync(JsonElement model)
+{
+    var template = GetTemplate("Record");
+
+    var templateProcessor = new RazorTemplateProcessor();
+
+    var result = await templateProcessor.ProcessAsync(template, new { Name = model.GetProperty("name").GetString() });
+
+    File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
+}
+ ```
+
 ## How to run locally
 
 
